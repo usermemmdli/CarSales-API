@@ -16,7 +16,7 @@ public class MyUsersDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         Users users = usersRepository.findByPhoneNumber((phoneNumber))
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + phoneNumber));
+                .orElseThrow(() -> new RuntimeException("User not found with phone number: " + phoneNumber));
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(users.getPhoneNumber())

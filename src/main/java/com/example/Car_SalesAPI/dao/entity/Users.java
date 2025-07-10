@@ -33,6 +33,8 @@ public class Users implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
     Roles roles;
+    List<String> cardsId;
+    List<String> announcementId;
     Timestamp createdAt;
     Timestamp updatedAt;
 
