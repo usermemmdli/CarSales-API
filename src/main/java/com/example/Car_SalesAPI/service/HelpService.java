@@ -2,6 +2,7 @@ package com.example.Car_SalesAPI.service;
 
 import com.example.Car_SalesAPI.dao.entity.Help;
 import com.example.Car_SalesAPI.dao.entity.Users;
+import com.example.Car_SalesAPI.dao.repository.HelpRepository;
 import com.example.Car_SalesAPI.dto.request.HelpRequest;
 import com.example.Car_SalesAPI.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class HelpService {
     private final AuthenticationHelperService authenticationHelperService;
+    private final HelpRepository helpRepository;
 
     public void sendHelpRequest(String currentPhoneNumber, HelpRequest helpRequest) {
         Users user = authenticationHelperService.getAuthenticatedUser(currentPhoneNumber);
@@ -22,5 +24,6 @@ public class HelpService {
         help.setDescription(helpRequest.getDescription());
         help.setStatus(true);
         help.setCreatedAt(Date.from(Instant.now()));
+        helpRepository.save(help);
     }
 }
