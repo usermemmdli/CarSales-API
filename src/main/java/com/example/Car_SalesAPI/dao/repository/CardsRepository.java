@@ -11,4 +11,6 @@ public interface CardsRepository extends MongoRepository<Cards, String> {
     List<Cards> findAllByIdIn(List<String> ids);
 
     void deleteByUserId(Long userId);
+
+    boolean existsByUserId(Long userId);
 }

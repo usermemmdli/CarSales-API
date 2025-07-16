@@ -2,6 +2,7 @@ package com.example.Car_SalesAPI.security;
 
 import com.example.Car_SalesAPI.dao.entity.Users;
 import com.example.Car_SalesAPI.dao.repository.UsersRepository;
+import com.example.Car_SalesAPI.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ public class MyUsersDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         Users users = usersRepository.findByPhoneNumber((phoneNumber))
-                .orElseThrow(() -> new RuntimeException("User not found with phone number: " + phoneNumber));
+                .orElseThrow(() -> new UserNotFoundException("User not found with phone number: " + phoneNumber));
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(users.getPhoneNumber())

@@ -7,6 +7,7 @@ import com.example.Car_SalesAPI.dao.repository.AnnouncementRepository;
 import com.example.Car_SalesAPI.dao.repository.BookmarksRepository;
 import com.example.Car_SalesAPI.dto.response.AnnouncementResponse;
 import com.example.Car_SalesAPI.dto.response.pagination.AnnouncementPageResponse;
+import com.example.Car_SalesAPI.exception.BookmarksNotFoundException;
 import com.example.Car_SalesAPI.mapper.AnnouncementMapper;
 import com.example.Car_SalesAPI.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class BookmarksService {
         Users user = authenticationHelperService.getAuthenticatedUser(currentPhoneNumber);
         Pageable pageable = PageRequest.of(page, count);
         Bookmarks userBookmarks = bookmarksRepository.findByUsersId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Bookmarks not found"));
+                .orElseThrow(() -> new BookmarksNotFoundException("Bookmarks not found"));
 
         Page<Announcement> allAnnouncements = announcementRepository.findAllById(userBookmarks.getAnnouncementId(), pageable);
 
@@ -49,7 +50,7 @@ public class BookmarksService {
         if (bookmarksRepository.existsById(id)) {
             bookmarksRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Bookmarks not found");
+            throw new BookmarksNotFoundException("Bookmarks not found");
         }
     }
 }

@@ -8,6 +8,7 @@ import com.example.Car_SalesAPI.dao.repository.RolesRepository;
 import com.example.Car_SalesAPI.dao.repository.UsersRepository;
 import com.example.Car_SalesAPI.dto.request.AnnouncementRequest;
 import com.example.Car_SalesAPI.dto.response.AnnouncementResponse;
+import com.example.Car_SalesAPI.exception.RolesNotFoundException;
 import com.example.Car_SalesAPI.mapper.AnnouncementMapper;
 import com.example.Car_SalesAPI.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +86,7 @@ public class AnnouncementService {
         announcement.setUpdatedAt(Date.from(Instant.now()));
         if (!announcementRepository.existsByUserId(user.getId())) {
             Roles sellerRoles = rolesRepository.findByName("SELLER")
-                    .orElseThrow(() -> new RuntimeException("Roles not found"));
+                    .orElseThrow(() -> new RolesNotFoundException("Roles not found"));
             user.setRoles(sellerRoles);
         }
         announcementRepository.save(announcement);

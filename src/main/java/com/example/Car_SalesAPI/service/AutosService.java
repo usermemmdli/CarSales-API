@@ -7,6 +7,8 @@ import com.example.Car_SalesAPI.dao.repository.AnnouncementRepository;
 import com.example.Car_SalesAPI.dao.repository.BookmarksRepository;
 import com.example.Car_SalesAPI.dto.response.AnnouncementResponse;
 import com.example.Car_SalesAPI.dto.response.pagination.AnnouncementPageResponse;
+import com.example.Car_SalesAPI.exception.AnnouncementNotFoundException;
+import com.example.Car_SalesAPI.exception.BookmarksNotFoundException;
 import com.example.Car_SalesAPI.mapper.AnnouncementMapper;
 import com.example.Car_SalesAPI.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,7 @@ public class AutosService {
     public void addCarInBookmarks(String currentPhoneNumber, String id) {
         Users user = authenticationHelperService.getAuthenticatedUser(currentPhoneNumber);
         Announcement announcement = announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
+                .orElseThrow(() -> new AnnouncementNotFoundException("Announcement not found"));
 
         if (!bookmarksRepository.existsByUsersId(user.getId())) {
             Bookmarks bookmarks = new Bookmarks();
@@ -60,7 +62,7 @@ public class AutosService {
             bookmarksRepository.save(bookmarks);
         } else {
             Bookmarks bookmarks = bookmarksRepository.findByUsersId(user.getId())
-                    .orElseThrow(() -> new RuntimeException("Bookmarks not found"));
+                    .orElseThrow(() -> new BookmarksNotFoundException("Bookmarks not found"));
             bookmarks.getAnnouncementId().add(announcement.getId());
             bookmarksRepository.save(bookmarks);
         }

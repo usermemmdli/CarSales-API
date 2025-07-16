@@ -13,6 +13,8 @@ import com.example.Car_SalesAPI.dto.request.UserEditRequest;
 import com.example.Car_SalesAPI.dto.response.AccountResponse;
 import com.example.Car_SalesAPI.dto.response.CardsResponse;
 import com.example.Car_SalesAPI.dto.response.UserProfileResponse;
+import com.example.Car_SalesAPI.exception.CardsNotFoundException;
+import com.example.Car_SalesAPI.exception.InvalidEmailOrPasswordException;
 import com.example.Car_SalesAPI.mapper.CardsMapper;
 import com.example.Car_SalesAPI.mapper.UsersMapper;
 import com.example.Car_SalesAPI.security.AuthenticationHelperService;
@@ -80,7 +82,7 @@ public class UsersService {
             user.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
             usersRepository.save(user);
         } else {
-            throw new RuntimeException("Password does not match");
+            throw new InvalidEmailOrPasswordException("Password does not match");
         }
     }
 
@@ -107,7 +109,7 @@ public class UsersService {
         if (user.getCardsId().contains(id)) {
             cardsRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Card does not exist");
+            throw new CardsNotFoundException("Card does not exist");
         }
     }
 
@@ -115,8 +117,12 @@ public class UsersService {
         Users user = authenticationHelperService.getAuthenticatedUser(currentPhoneNumber);
         if (passwordEncoder.matches(userDeleteRequest.getPassword(), user.getPassword())) {
             usersRepository.delete(user);
-            announcementRepository.deleteByUserId(user.getId());
-            cardsRepository.deleteByUserId(user.getId());
+            if (announcementRepository.existsByUserId(user.getId())) {
+                announcementRepository.deleteByUserId(user.getId());
+            }
+            if (cardsRepository.existsByUserId(user.getId())) {
+                cardsRepository.deleteByUserId(user.getId());
+            }
         }
     }
 }

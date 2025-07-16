@@ -10,6 +10,8 @@ import com.example.Car_SalesAPI.dto.response.AnnouncementResponse;
 import com.example.Car_SalesAPI.dto.response.HelpResponse;
 import com.example.Car_SalesAPI.dto.response.pagination.AnnouncementPageResponse;
 import com.example.Car_SalesAPI.dto.response.pagination.HelpPageResponse;
+import com.example.Car_SalesAPI.exception.AnnouncementNotFoundException;
+import com.example.Car_SalesAPI.exception.HelpNotFoundException;
 import com.example.Car_SalesAPI.mapper.AnnouncementMapper;
 import com.example.Car_SalesAPI.mapper.HelpMapper;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,7 @@ public class AdminService {
 
     public void checkAds(CheckAdsRequest checkAdsRequest) {
         Announcement announcement = announcementRepository.findById(checkAdsRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
+                .orElseThrow(() -> new AnnouncementNotFoundException("Announcement not found"));
         announcement.setIsActive(checkAdsRequest.getIsActive());
         announcement.setUpdatedAt(Date.from(Instant.now()));
         announcementRepository.save(announcement);
@@ -71,7 +73,7 @@ public class AdminService {
 
     public void helpUser(HelpStatusRequest helpStatusRequest) {
         Help help = helpRepository.findById(helpStatusRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Help not found"));
+                .orElseThrow(() -> new HelpNotFoundException("Help not found"));
         help.setStatus(helpStatusRequest.getStatus());
         help.setUpdatedAt(Date.from(Instant.now()));
         helpRepository.save(help);
