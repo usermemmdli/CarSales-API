@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotNull
+    @NotNull(message = "Phone number cannot be null")
     private String phoneNumber;
-    @NotNull
+    @NotNull(message = "Password cannot be null")
     private String password;
 }

@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class SignUpRequest {
-    @NotNull
+    @NotNull(message = "Name cannot be null")
     private String name;
     private String surname;
-    @NotNull
+    @NotNull(message = "Phone number cannot be null")
     private String phoneNumber;
-    @NotNull
+    @NotNull(message = "Password number cannot be null")
     private String password;
 }
