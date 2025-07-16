@@ -70,6 +70,3 @@ It allows users to post car listings, view ads, manage profiles, and interact wi
 - **JUnit & Mockito**
 
 ---
-
-## 🗂 Project Structure
-
